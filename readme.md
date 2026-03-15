@@ -35,6 +35,15 @@ When you ask a question, your question gets embedded the same way, and FAISS fin
    streamlit run app.py
    ```
 
+## Running with Docker
+
+1. Copy `.env.example` to `.env` and add your API keys.
+2. Build and start the container:
+   ```bash
+   docker-compose up --build
+   ```
+3. Access the app at `http://localhost:8501`.
+
 ## API Keys
 
 You need at least one of:
@@ -53,6 +62,9 @@ DocChat/
 ├── htmlTemplates.py  # Chat bubble HTML/CSS
 ├── requirements.txt  # Python dependencies
 ├── logs/             # Persistent application logs (git-ignored)
+├── Dockerfile        # Docker image definition
+├── docker-compose.yml # Container orchestration
+├── .dockerignore     # Files to exclude from Docker image
 ├── .env.example      # Template — copy this to .env and fill in your keys
 └── .gitignore
 ```
