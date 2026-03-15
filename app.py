@@ -260,6 +260,10 @@ def render_sidebar() -> None:
 
             with st.spinner("Reading and indexing your documents…"):
                 try:
+                    # Capture first file name for export naming (without extension)
+                    first_file = uploaded_files[0].name
+                    st.session_state.doc_name = os.path.splitext(first_file)[0]
+
                     raw_text = extract_text(uploaded_files)
                     chunks = get_text_chunks(raw_text)
                     vectorstore = get_vectorstore(tuple(chunks), backend=backend)
@@ -288,11 +292,13 @@ def render_sidebar() -> None:
         # Export button — only shown once there's something to export
         if st.session_state.get("chat_history"):
             transcript = _build_transcript(st.session_state.chat_history)
-            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+            # Use ddmmyy format as requested
+            date_str = datetime.now().strftime("%d%m%y")
+            doc_name = st.session_state.get("doc_name", "docchat_export")
             st.download_button(
                 label="💾 Export Chat (.txt)",
                 data=transcript,
-                file_name=f"docchat_export_{timestamp}.txt",
+                file_name=f"{doc_name}_{date_str}.txt",
                 mime="text/plain",
                 use_container_width=True,
             )
@@ -345,6 +351,7 @@ def initialise_session_state() -> None:
         "chat_history": [],
         "source_docs": [],
         "backend": "huggingface",
+        "doc_name": "docchat_export",
     }
     for key, value in defaults.items():
         if key not in st.session_state:
