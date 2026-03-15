@@ -1,4 +1,15 @@
+# =============================================================
+# SECRETS & API KEYS — Never commit these to version control!
+# =============================================================
+# Copy .env.example → .env and fill in your real keys locally.
+# The actual .env file is intentionally excluded here.
+.env
+*.env
+.env.*
+!.env.example        # .env.example (with placeholder values) IS safe to commit
+
 # Byte-compiled / optimized / DLL files
+logs/
 __pycache__/
 *.py[cod]
 *$py.class

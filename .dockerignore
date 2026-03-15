@@ -1,0 +1,15 @@
+# .dockerignore
+__pycache__
+.env
+.git
+logs/*.log
+*.pyc
+*.pyo
+*.pyd
+.db
+.sqlite
+.vscode
+.idea
+venv
+env
+.streamlit/config.toml
