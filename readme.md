@@ -12,11 +12,23 @@ Upload a PDF, DOCX, or plain text file, hit Process, and start chatting. It reme
 - Export the full conversation as a text file
 - Switch between OpenAI (GPT-3.5) and HuggingFace (Qwen2.5-72B) backends
 
-## How it works under the hood
+## How it works: Retrieval-Augmented Generation (RAG)
 
-When you upload a file, the app extracts the text, splits it into overlapping 1000-character chunks, and converts each chunk into a vector embedding using the chosen model. Those vectors go into a FAISS index stored in memory.
+DocChat is a **Retrieval-Augmented Generation (RAG)** system. Instead of relying solely on the LLM's internal memory (which can result in hallucinations), the system "retrieves" relevant facts from your documents and "augments" the prompt before "generating" an answer.
 
-When you ask a question, your question gets embedded the same way, and FAISS finds the 4 most similar chunks by cosine similarity. Those chunks get passed to the LLM as context alongside your question and the conversation history. The LLM reads the relevant sections and synthesises an answer — it won't make things up if the answer isn't in the documents.
+### The RAG Workflow
+
+1.  **Ingestion & Embedding**: 
+    When you upload a file, the app extracts the text, splits it into overlapping 1000-character chunks, and converts each chunk into a mathematical vector embedding. These vectors are stored in a local **FAISS** index.
+2.  **Retrieval**: 
+    When you ask a question, the system converts your query into a vector and finds the 4 most similar chunks in your documents by calculating cosine similarity.
+3.  **Augmentation & Generation**: 
+    The retrieved chunks are passed to the LLM (OpenAI or Qwen) as context. The LLM is instructed to answer **only** based on that context. This ensures the answer is grounded in your documents.
+
+### Why RAG?
+- **Accuracy**: Answers are factually grounded in your specific files.
+- **Verifiability**: You can inspect the source chunks used for every answer.
+- **Privacy**: Your sensitive data stays within the context of the chat session rather than being part of the model's global training.
 
 ## Setup
 
